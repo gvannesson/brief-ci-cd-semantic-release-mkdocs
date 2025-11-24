@@ -8,50 +8,35 @@ on:
 jobs:
   setup_uv:
     runs-on: ubuntu-latest
-    outputs:
-      uv-path: ${{ steps.uv-path.outputs.path }}
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install uv
-        run: curl -sSf https://install.astral.sh/uv | sh
-
-      - name: Add uv to PATH
-        id: uv-path
-        run: echo "${HOME}/.uv/bin" >> $GITHUB_PATH
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
 
       - name: Sync dependencies
         run: uv sync
 
   lint:
     needs: [setup_uv]
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v6
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
 
-          - name: Add uv to PATH
-            run: echo "${{ needs.setup_uv.outputs.uv-path }}" >> $GITHUB_PATH
+      - name: Run Ruff Check
+        run: uv run ruff check .
 
-          - name: Sync dependencies (uv sync)
-            run: uv sync
-
-          - name: Run Ruff Check
-            run: uv run ruff check .
-
-          - name: Check Formatting with Ruff
-            run: uv run ruff format --check .
+      - name: Check Formatting with Ruff
+        run: uv run ruff format --check .
 
   typecheck:
     needs: [setup_uv]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      - name: Add uv to PATH
-        run: echo "${{ needs.setup_uv.outputs.uv-path }}" >> $GITHUB_PATH
-
-      - name: Sync dependencies (uv sync)
-        run: uv sync
 
       - name: Run Mypy
         run: uv run mypy app/
@@ -61,12 +46,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      - name: Add uv to PATH
-        run: echo "${{ needs.setup_uv.outputs.uv-path }}" >> $GITHUB_PATH
-
-      - name: Sync dependencies (uv sync)
-        run: uv sync
 
       - name: Run Bandit
         run: uv run bandit -r app/
@@ -94,12 +73,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-
-      - name: Add uv to PATH
-        run: echo "${{ needs.setup_uv.outputs.uv-path }}" >> $GITHUB_PATH
-
-      - name: Sync dependencies (uv sync)
-        run: uv sync
 
       - name: Run tests with coverage
         env:
