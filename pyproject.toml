@@ -19,10 +19,6 @@ dependencies = [
 [dependency-groups]
 dev = [
     "diagrams>=0.24.4",
-]
-
-[tool.uv]
-dev-dependencies = [
     "ruff",
     "mypy",
     "pytest",

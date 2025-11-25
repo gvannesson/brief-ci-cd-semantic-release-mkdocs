@@ -1,7 +1,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
-from typing import List
+
 from app.database import get_db
 from app.models.item import Item
 from app.schemas.item import ItemCreate, ItemResponse, ItemUpdate
@@ -18,7 +18,7 @@ def get_items(
     skip: int = 0,
     limit: int = 10,
     db: Session = Depends(get_db),
-)-> List[Item]:
+)-> list[Item]:
     return ItemService.get_all(db, skip, limit)
 
 
