@@ -28,15 +28,13 @@ app.include_router(items_router)
 
 
 @app.get("/")
-def root()-> dict[str, str]:
+def root() -> dict[str, str]:
     return {"message": "Items CRUD API"}
 
 
 @app.get("/health")
-def health()-> dict[str, str]:
+def health() -> dict[str, str]:
     return {"status": "healthy"}
-
-
 
 
 very_long_variable_name_that_exceeds_line_length = "Cette ligne est ok"

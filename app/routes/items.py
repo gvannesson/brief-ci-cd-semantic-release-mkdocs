@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 
@@ -12,21 +11,17 @@ router = APIRouter(prefix="/items", tags=["items"])
 MAX_ITEMS_PER_PAGE = 1000
 
 
-
 @router.get("/", response_model=list[ItemResponse])
 def get_items(
     skip: int = 0,
     limit: int = 10,
     db: Session = Depends(get_db),
-)-> list[Item]:
+) -> list[Item]:
     return ItemService.get_all(db, skip, limit)
 
 
 @router.get("/{item_id}", response_model=ItemResponse)
-def get_item(
-    item_id: int,
-    db: Session = Depends(get_db)
-) -> Item:
+def get_item(item_id: int, db: Session = Depends(get_db)) -> Item:
     item = ItemService.get_by_id(db, item_id)
     if not item:
         raise HTTPException(
@@ -55,12 +50,10 @@ def update_item(item_id: int, item_data: ItemUpdate) -> Item:
 
 
 @router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_item(item_id: int,  db: Session = Depends(get_db)) -> None:
+def delete_item(item_id: int, db: Session = Depends(get_db)) -> None:
     deleted = ItemService.delete(db, item_id)
     if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Item with id {item_id} not found",
         )
-
-
