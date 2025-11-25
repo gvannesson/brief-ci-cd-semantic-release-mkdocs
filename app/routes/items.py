@@ -12,9 +12,11 @@ router = APIRouter(prefix="/items", tags=["items"])
 MAX_ITEMS_PER_PAGE = 1000
 
 @router.get("/", response_model=list[ItemResponse])
-def get_items(skip: int = 0, limit: int = 100) -> list[Item]:
-    db = Depends(get_db)
-    """Récupère la liste des items avec pagination."""
+def get_items(
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(get_db),
+):
     return ItemService.get_all(db, skip, limit)
 
 
