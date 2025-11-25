@@ -1,4 +1,4 @@
-➜  brief-ci-cd-semantic-release-mkdocs git:(main) ✗ uv run ruff check      
+➜  brief-ci-cd-semantic-release-mkdocs git:(main) ✗ uv run ruff check
 F401 [*] `sys` imported but unused
   --> app/database.py:9:8
    |
@@ -131,4 +131,4 @@ Found 11 errors.
 
 
 
-concernant mypy, 
+concernant mypy,
