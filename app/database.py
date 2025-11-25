@@ -5,7 +5,8 @@ et fournit une fonction générateur pour obtenir des sessions de base de donné
 """
 
 import os
-from typing import Generator
+from collections.abc import Generator
+
 from sqlmodel import Session, create_engine
 
 DATABASE_URL = os.getenv(
@@ -17,6 +18,6 @@ POOL_SIZE = 10
 engine = create_engine(DATABASE_URL)
 
 
-def get_db() -> Generator[Session, None, None]:
+def get_db() -> Generator[Session]:
     with Session(engine) as session:
         yield session
