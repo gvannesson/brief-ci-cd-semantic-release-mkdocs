@@ -1,13 +1,10 @@
 name: Semantic Release
 
 on:
-  workflow_run:
-    workflows: ["LINT & TEST"]
-    types:
-      - completed
-    branches:
-      - main
-      - develop
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 permissions:
   contents: write       # pour créer des tags
@@ -17,8 +14,6 @@ permissions:
 
 jobs:
   release:
-    # Ne s'exécute que si la CI a réussi
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
