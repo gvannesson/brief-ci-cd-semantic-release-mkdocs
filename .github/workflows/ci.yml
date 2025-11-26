@@ -79,7 +79,6 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:15
@@ -93,18 +92,23 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-
     steps:
       - uses: actions/checkout@v6
-
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-
-      - run: uv sync
-
-      - name: Run tests
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+      - name: Sync dependencies
+        run: uv sync
+      - name: Run tests with coverage
         env:
           PGDATABASE: test_db
-        run: uv run pytest --cov=app --cov-report=term --cov-report=html
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        run: |
+          uv run pytest --cov=app --cov-report=term --cov-report=html
+          uv run coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+      - name: Archive coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/

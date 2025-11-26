@@ -1,0 +1,35 @@
+name: Build & Push Docker Image
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses:
+
+      - name: Log in to GitHub Container Registry
+        uses:
+
+      - name: Extract metadata
+        id: meta
+        uses:
+
+      - name: Build and push Docker image
+        uses:
