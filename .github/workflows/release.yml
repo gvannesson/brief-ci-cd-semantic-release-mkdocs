@@ -16,7 +16,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    # Ne s'exécute que sur push direct vers main/develop
+    # Ne s'exécute que en push direct vers main/develop
     if: startsWith(github.ref, 'refs/heads/')
 
     steps:
