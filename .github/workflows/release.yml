@@ -7,7 +7,7 @@ on:
       - develop
 
 permissions:
-  contents: write       # pour créer des tags et releases GitHub
+  contents: write
   packages: write
   issues: write
   pull-requests: write
@@ -16,7 +16,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    # Ne s'exécute que sur un push vers main ou develop
     if: startsWith(github.ref, 'refs/heads/')
 
     steps:
@@ -28,7 +27,7 @@ jobs:
       - name: Fetch tags
         run: git fetch --tags
 
-      - name: Install UV
+      - name: Setup UV
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
@@ -36,16 +35,12 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Run semantic-release (GitHub only)
+      - name: Run Semantic Release
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release publish --no-push
+        run: uv run semantic-release publish
 
-      - name: Push new tag (if version created)
-        if: steps.release.outputs.version != ''
-        run: git push --follow-tags
-
-      - name: Publish Docker image (if new release)
+      - name: Publish Docker image if release created
         if: steps.release.outputs.released == 'true'
         run: uv run ./scripts/publish-ghcr.sh
