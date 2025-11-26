@@ -1,10 +1,10 @@
 name: Semantic Release
 
 on:
-  push:
-    branches:
-      - main
-      - develop
+  workflow_run:
+    workflows: ["LINT & TEST"]
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -15,8 +15,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-
-    if: startsWith(github.ref, 'refs/heads/')
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
@@ -40,8 +39,3 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run semantic-release version && uv run semantic-release publish
-
-
-      - name: Publish Docker image if release created
-        if: steps.release.outputs.released == 'true'
-        run: uv run ./scripts/publish-ghcr.sh
