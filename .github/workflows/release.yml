@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0   # récupère tout l’historique des commits et tags
-          ref: ${{ github.ref }}
+          ref: ${{ github.ref_name }}
 
       # 2️⃣ Installer UV et configurer le cache
       - name: Set up UV
