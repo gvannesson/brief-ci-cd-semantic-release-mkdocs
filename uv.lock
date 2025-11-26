@@ -1422,6 +1422,7 @@ dependencies = [
     { name = "pre-commit" },
     { name = "psycopg2-binary" },
     { name = "pytest" },
+    { name = "pytest-cov" },
     { name = "ruff" },
     { name = "sqlmodel" },
 ]
@@ -1444,6 +1445,7 @@ requires-dist = [
     { name = "pre-commit", specifier = ">=4.4.0" },
     { name = "psycopg2-binary", specifier = ">=2.9.11" },
     { name = "pytest", specifier = ">=9.0.1" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "sqlmodel", specifier = ">=0.0.27" },
 ]

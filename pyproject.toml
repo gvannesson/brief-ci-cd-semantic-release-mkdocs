@@ -13,6 +13,7 @@ dependencies = [
     "pre-commit>=4.4.0",
     "psycopg2-binary>=2.9.11",
     "pytest>=9.0.1",
+    "pytest-cov>=7.0.0",
     "ruff>=0.14.6",
     "sqlmodel>=0.0.27",
 ]
@@ -62,6 +63,7 @@ plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 python_files = "test_*.py"
 python_functions = "test_*"
 addopts = "--strict-markers --cov=app --cov-report=term-missing"

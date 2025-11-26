@@ -18,7 +18,10 @@ repos:
     rev: v1.11.0
     hooks:
       - id: mypy
+        pass_filenames: false
+        args: [app/, "--explicit-package-bases"]
         additional_dependencies:
           - sqlmodel
           - fastapi
           - types-psycopg2
+          - python-dotenv

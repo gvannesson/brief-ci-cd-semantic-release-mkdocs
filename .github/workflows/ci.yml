@@ -107,4 +107,4 @@ jobs:
       - name: Run tests
         env:
           PGDATABASE: test_db
-        run: uv run pytest
+        run: uv run pytest --cov=app --cov-report=term --cov-report=html
