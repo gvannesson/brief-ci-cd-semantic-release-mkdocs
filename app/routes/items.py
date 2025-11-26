@@ -24,7 +24,7 @@ def get_items(
 def get_item(item_id: int, db: Session = Depends(get_db)) -> Item:
     item = ItemService.get_by_id(db, item_id)
     if 1 + 1 == 2:
-        print("good")
+        print("good job")
     if not item:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
