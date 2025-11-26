@@ -2,9 +2,9 @@ name: Semantic Release
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
 
 permissions:
   contents: write       # pour créer des tags
@@ -16,33 +16,46 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    # Ne s'exécute que sur push direct vers main/develop
+    if: startsWith(github.ref, 'refs/heads/')
+
     steps:
-      # 1️⃣ Checkout du code
+      # 1️⃣ Checkout complet avec tout l'historique
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0   # récupère tout l’historique des commits et tags
-          ref: ${{ github.ref_name }}
+          fetch-depth: 0
 
-      # 2️⃣ Installer UV et configurer le cache
+      # 2️⃣ Récupérer tous les tags
+      - name: Fetch all tags
+        run: git fetch --tags
+
+      # 3️⃣ Debug git (optionnel)
+      - name: Show git info
+        run: |
+          git status
+          git branch
+          git log --oneline -5
+
+      # 4️⃣ Installer UV et configurer le cache
       - name: Set up UV
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
 
-      # 3️⃣ Installer les dépendances via UV
+      # 5️⃣ Installer les dépendances via UV
       - name: Install dependencies
         run: uv sync
 
-      # 4️⃣ Lancer semantic-release
+      # 6️⃣ Lancer semantic-release
       - name: Python Semantic Release
         id: release
         run: uv run semantic-release publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5️⃣ Publier l'image Docker sur GHCR si une release a été créée
+      # 7️⃣ Publier l'image Docker sur GHCR si une release a été créée
       - name: Publish to GHCR (if new release)
         if: steps.release.outputs.released == 'true'
         run: uv run ./scripts/publish-ghcr.sh
