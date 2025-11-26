@@ -20,6 +20,9 @@ jobs:
       # 1️⃣ Checkout du code
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0   # récupère tout l’historique des commits et tags
+          ref: ${{ github.ref }}
 
       # 2️⃣ Installer UV et configurer le cache
       - name: Set up UV
