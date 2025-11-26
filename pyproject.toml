@@ -71,7 +71,7 @@ addopts = "--strict-markers --cov=app --cov-report=term-missing"
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
-version_variables = ["app/init.py:version"]
+version_variables = ["app/__init__.py:version"]
 version_source= "commit"
 starting_version = "0.1.0"
 build_command = ""
