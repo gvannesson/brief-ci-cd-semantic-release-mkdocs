@@ -1,0 +1,50 @@
+name: Semantic Release
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: write       # pour créer des tags
+  packages: write       # pour publier sur GHCR/PyPI
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    # Ne s'exécute que si la CI a réussi
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout du code
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      # 2️⃣ Installer UV et configurer le cache
+      - name: Set up UV
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      # 3️⃣ Installer les dépendances via UV
+      - name: Install dependencies
+        run: uv sync
+
+      # 4️⃣ Lancer semantic-release
+      - name: Python Semantic Release
+        id: release
+        run: uv run semantic-release publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5️⃣ Publier l'image Docker sur GHCR si une release a été créée
+      - name: Publish to GHCR (if new release)
+        if: steps.release.outputs.released == 'true'
+        run: uv run ./scripts/publish-ghcr.sh
