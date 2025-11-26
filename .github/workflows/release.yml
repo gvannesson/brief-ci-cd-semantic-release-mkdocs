@@ -39,7 +39,8 @@ jobs:
         id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release publish
+        run: uv run semantic-release version && uv run semantic-release publish
+
 
       - name: Publish Docker image if release created
         if: steps.release.outputs.released == 'true'
