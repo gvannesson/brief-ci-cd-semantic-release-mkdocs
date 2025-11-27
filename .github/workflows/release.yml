@@ -35,3 +35,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run semantic-release version && uv run semantic-release publish
+
+  call-release:
+    needs: [release]
+    if: github.event_name == 'push' && success()
+    uses: ./.github/workflows/build.yml
