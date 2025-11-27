@@ -112,3 +112,9 @@ jobs:
         with:
           name: coverage-report
           path: htmlcov/
+
+
+  call-release:
+    needs: [precommit, lint, typecheck, security, tests]
+    if: github.event_name == 'push' && success()
+    uses: ./.github/workflows/release.yml
