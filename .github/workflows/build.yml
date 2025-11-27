@@ -1,8 +1,9 @@
 name: Build & Push Docker Image
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["LINT & TEST"]   # pas "Release"
+    types: [completed]
 
 env:
   REGISTRY: ghcr.io
