@@ -37,4 +37,4 @@ def health() -> dict[str, str]:
     return {"status": "healthy"}
 
 
-very_long_variable_name_that_exceeds_line_length = "Cette ligne est bien"
+very_long_variable_name_that_exceeds_line_length = "Cette ligne est ok"
