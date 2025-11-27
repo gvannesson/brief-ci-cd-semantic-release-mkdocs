@@ -1,7 +1,11 @@
 name: Semantic Release
 
 on:
-  workflow_call:
+    # S'exécute automatiquement sur push vers main/develop (après merge de PR)
+    push:
+        branches:
+            - main               # Push sur la branche principale (production)
+            - develop
 
 permissions:
   contents: write
